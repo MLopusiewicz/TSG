@@ -1,0 +1,18 @@
+{
+    "name": "WorldBaker.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4e848429bd7d2984fb4952767e9b781f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
