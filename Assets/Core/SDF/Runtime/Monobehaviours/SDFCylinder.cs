@@ -19,8 +19,11 @@ public class SDFCylinder : SDFItem {
 
     }
 
-
-    private void OnDrawGizmos() {
+    public override Bounds GetBounds() {
+        Vector3 scaledSize = new Vector3(radius * 2, height, radius * 2);
+        return new Bounds(transform.position, Vector3.Scale(scaledSize, transform.lossyScale));
     }
 
+
+    
 }

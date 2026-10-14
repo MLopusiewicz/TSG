@@ -12,8 +12,8 @@ public class SimulationLogic : MonoBehaviour {
     public SimulationData physicSetup;
 
     [Header("Symulacja")]
-    public int count = 10000;
-    public Vector3 gravity = new Vector3(0f, -9.81f, 0f);
+    public int ballCount = 10000;
+
     public Vector3 spawnCenter = new Vector3(0f, 15f, 0f);
 
     public Vector3 spawnSize = new Vector3(10f, 4f, 10f);
@@ -32,12 +32,12 @@ public class SimulationLogic : MonoBehaviour {
     void Setup() {
 
         space = SimulationSpace.Make(volume);
-        balls = new NativeArray<BallData>(count, Allocator.Persistent);
+        balls = new NativeArray<BallData>(ballCount, Allocator.Persistent);
 
-        matrices = new NativeArray<float4x4>(count, Allocator.Persistent);
+        matrices = new NativeArray<float4x4>(ballCount, Allocator.Persistent);
         matricesView = matrices.Reinterpret<Matrix4x4>();
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < ballCount; i++) {
             balls[i] = new BallData {
                 position = (float3)spawnCenter + new float3(
                     UnityEngine.Random.Range(-0.5f, 0.5f) * spawnSize.x,
@@ -76,7 +76,7 @@ public class SimulationLogic : MonoBehaviour {
                 physicSetup = physicSetup
             };
 
-            job.Schedule(count, 64).Complete();
+            job.Schedule(ballCount, 64).Complete();
 
             Render();
             yield return null;
@@ -84,8 +84,8 @@ public class SimulationLogic : MonoBehaviour {
     }
 
     void Render() {
-        for (int start = 0; start < count; start += MaxBatch) {
-            int n = math.min(MaxBatch, count - start);
+        for (int start = 0; start < ballCount; start += MaxBatch) {
+            int n = math.min(MaxBatch, ballCount - start);
             Graphics.RenderMeshInstanced(renderParams, mesh, 0, matricesView, n, start);
         }
     }

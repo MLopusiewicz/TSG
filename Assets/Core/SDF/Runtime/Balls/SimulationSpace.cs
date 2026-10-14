@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine;
 using static Codice.Client.Commands.WkTree.WorkspaceTreeNode;
 
 public struct SimulationSpace : IDisposable {
@@ -12,9 +13,9 @@ public struct SimulationSpace : IDisposable {
     public static SimulationSpace Make(SDFVolumeData data) {
         var space = new SimulationSpace() {
             dimensions = new int3(data.SDFTexture.width, data.SDFTexture.height, data.SDFTexture.depth),
-            boundsMin = -data.Size / 2 + data.Offset,
-            boundsMax = data.Size / 2 + data.Offset,
-            boundsSize = data.Size,
+            boundsMin = data.Bounds.min,
+            boundsMax = data.Bounds.max,
+            boundsSize = data.Bounds.size,
             voxelSize = data.VoxelSize
         };
         space.data = new NativeArray<float>(space.dimensions.x * space.dimensions.y * space.dimensions.z, Allocator.Persistent);

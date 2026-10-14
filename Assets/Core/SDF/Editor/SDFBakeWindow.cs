@@ -3,9 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SDFBakeWindow : EditorWindow {
-    private Vector3 size = Vector3.one * 10f;
-    private Vector3 offset = Vector3.zero;
-
+    private Bounds bounds;
     private float voxelSize = 0.1f;
 
     string sceneName => SceneManager.GetActiveScene().name;
@@ -35,9 +33,7 @@ public class SDFBakeWindow : EditorWindow {
 
         EditorGUI.BeginChangeCheck();
 
-        size = EditorGUILayout.Vector3Field("Size", size);
-        offset = EditorGUILayout.Vector3Field("Offset", offset);
-
+        bounds = EditorGUILayout.BoundsField("Bounds", bounds);
         voxelSize = EditorGUILayout.FloatField("Voxel Size", voxelSize);
 
         if (EditorGUI.EndChangeCheck()) {
@@ -45,6 +41,10 @@ public class SDFBakeWindow : EditorWindow {
         }
 
         EditorGUILayout.Space();
+
+        if (GUILayout.Button("Automatic bounds", GUILayout.Height(30))) {
+            this.bounds = GetVolume();
+        }
 
         if (GUILayout.Button("Bake", GUILayout.Height(30))) {
             Bake();
@@ -54,21 +54,21 @@ public class SDFBakeWindow : EditorWindow {
 
     private void OnSceneGUI(SceneView sceneView) {
         Handles.color = Color.green;
-        Handles.DrawWireCube(offset, size);
+        Handles.DrawWireCube(bounds.center, bounds.size);
     }
 
     private void Bake() {
         Vector3Int res = new Vector3Int(
-            Mathf.Max(1, Mathf.RoundToInt(size.x / voxelSize)),
-            Mathf.Max(1, Mathf.RoundToInt(size.y / voxelSize)),
-            Mathf.Max(1, Mathf.RoundToInt(size.z / voxelSize))
+            Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / voxelSize)),
+            Mathf.Max(1, Mathf.RoundToInt(bounds.size.y / voxelSize)),
+            Mathf.Max(1, Mathf.RoundToInt(bounds.size.z / voxelSize))
         );
 
         Texture3D resultTex = new Texture3D(res.x, res.y, res.z, TextureFormat.RFloat, false);
         var items = FindObjectsByType<SDFItem>(FindObjectsSortMode.None);
         resultTex = BakeSDFTexture(items, resultTex);
 
-        SDFVolumeData volume = new SDFVolumeData(size, offset, voxelSize, resultTex);
+        SDFVolumeData volume = new SDFVolumeData(bounds, voxelSize, resultTex);
 
 
         if (!System.IO.Directory.Exists(folder)) {
@@ -94,15 +94,24 @@ public class SDFBakeWindow : EditorWindow {
         }
     }
 
+    public Bounds GetVolume() {
+        Bounds volume = new Bounds(Vector3.zero, Vector3.zero);
+
+        foreach (var a in FindObjectsByType<SDFItem>(FindObjectsSortMode.None)) {
+            volume.Encapsulate(a.GetBounds());
+        }
+
+        return volume;
+    }
 
     public Texture3D BakeSDFTexture(SDFItem[] items, Texture3D tex) {
         for (int x = 0; x < tex.width; x++) {
             for (int y = 0; y < tex.height; y++) {
                 for (int z = 0; z < tex.depth; z++) {
                     Vector3 pos = new Vector3(
-                        (float)x / (tex.width - 1) * size.x + offset.x - size.x * 0.5f,
-                        (float)y / (tex.height - 1) * size.y + offset.y - size.y * 0.5f,
-                        (float)z / (tex.depth - 1) * size.z + offset.z - size.z * 0.5f
+                        (float)x / (tex.width - 1) * bounds.size.x + bounds.center.x - bounds.size.x * 0.5f,
+                        (float)y / (tex.height - 1) * bounds.size.y + bounds.center.y - bounds.size.y * 0.5f,
+                        (float)z / (tex.depth - 1) * bounds.size.z + bounds.center.z - bounds.size.z * 0.5f
                     );
                     float minDistance = float.MaxValue;
 
