@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd13b3bd47b0b049a252f4d2b99e101, type: 3}
   m_Name: SampleScene_SDF
   m_EditorClassIdentifier: SDFBaker::SDFVolumeData
-  voxelSize: 0.1
+  voxelSize: 0.05
   bounds:
-    m_Center: {x: 0, y: 0.5, z: 0}
-    m_Extent: {x: 5, y: 1.5, z: 5}
+    m_Center: {x: 0, y: 0.29000008, z: 0}
+    m_Extent: {x: 5.05, y: 1.76, z: 5.05}
   sdfTexture: {fileID: 11700000, guid: 3f1ad3e5ec536c44db108575076ed6ea, type: 2}

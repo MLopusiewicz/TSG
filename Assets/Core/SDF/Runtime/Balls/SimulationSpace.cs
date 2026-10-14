@@ -25,16 +25,16 @@ public struct SimulationSpace : IDisposable {
     }
 
     public float Sample(float3 worldPos) {
+
         //based on https://en.wikipedia.org/wiki/Trilinear_interpolation
+        //proxy box with corners in voxel centers and center in looked up voxel
+        //center of -1,-1, -1 voxel from current
+
         float3 clampedWorldPos = math.clamp(worldPos, boundsMin, boundsMax);
         float distanceToSimulationSpace = math.length(worldPos - clampedWorldPos);
-
         float3 simSpacePos = clampedWorldPos - boundsMin;
 
 
-
-        //proxy box with corners in voxel centers and center in looked up voxel
-        //center of -1,-1, -1 voxel from current
         int3 boxBoundVoxel = (int3)math.round((simSpacePos) / voxelSize) - new int3(1, 1, 1);
         float3 boxBoundMin = (float3)(boxBoundVoxel) * voxelSize;
         float3 posInBoxNormalized = (simSpacePos - boxBoundMin) / (2 * voxelSize);
@@ -50,13 +50,13 @@ public struct SimulationSpace : IDisposable {
         float c011 = VoxelSample(boxBoundVoxel + new int3(0, 1, 1));
         float c111 = VoxelSample(boxBoundVoxel + new int3(1, 1, 1));
 
-        //lerp to yz plane
+        //approx. x by lerping to yz plane
         float c00 = math.lerp(c000, c100, posInBoxNormalized.x);
         float c10 = math.lerp(c010, c110, posInBoxNormalized.x);
         float c01 = math.lerp(c001, c101, posInBoxNormalized.x);
         float c11 = math.lerp(c011, c111, posInBoxNormalized.x);
 
-        //lerp to z line
+        //approx. y by lerping to z line
         float c0 = math.lerp(c00, c10, posInBoxNormalized.y);
         float c1 = math.lerp(c01, c11, posInBoxNormalized.y);
 

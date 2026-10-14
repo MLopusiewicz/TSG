@@ -22,7 +22,7 @@ public class SDFBaker {
         var token = false;
 
         Vector3Int res = new Vector3Int(
-            Mathf.Max(0, Mathf.FloorToInt(bounds.size.x / voxelSize)),
+            Mathf.Max(0, Mathf.RoundToInt(bounds.size.x / voxelSize)),
             Mathf.Max(0, Mathf.RoundToInt(bounds.size.y / voxelSize)),
             Mathf.Max(0, Mathf.RoundToInt(bounds.size.z / voxelSize))
         );
@@ -33,10 +33,10 @@ public class SDFBaker {
         int reportInterval = Mathf.Max(1, operations / 200);
 
         try {
-            for (int x = 0; x < tex.width; x++) {
+            for (int z = 0; z < tex.depth; z++) {
                 for (int y = 0; y < tex.height; y++) {
-                    for (int z = 0; z < tex.depth; z++) {
-                        int index = z + y * tex.depth + x * tex.height * tex.depth;
+                    for (int x = 0; x < tex.width; x++) {
+                        int index = x + y * tex.width + z * tex.width * tex.height;
 
                         if (progress != null && index % reportInterval == 0) {
                             if (progress.Report((float)index / operations, $"Progress: {index}/{operations}")) {
