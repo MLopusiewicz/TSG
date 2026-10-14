@@ -13,7 +13,6 @@ struct BallData {
 struct BallSimulationJob : IJobParallelFor {
     public NativeArray<BallData> balls;
     [WriteOnly] public NativeArray<float4x4> matrices;
-
     public SimulationSpace simulationSpace;
     public SimulationData physicSetup;
     public float deltaTime;
@@ -24,12 +23,12 @@ struct BallSimulationJob : IJobParallelFor {
         float3 v = ball.velocity + physicSetup.gravity * deltaTime;
         float3 position = ball.position + v * deltaTime;
 
-        float d = simulationSpace.Sample(position) - physicSetup.radius;
+        float surfaceToSurfaceDistance = simulationSpace.Sample(position) - physicSetup.radius;
 
 
-        if (d < 0f) {
+        if (surfaceToSurfaceDistance < 0f) {
             float3 surfaceNormal = simulationSpace.Gradient(position);
-            position -= surfaceNormal * d;
+            position -= surfaceNormal * surfaceToSurfaceDistance;
 
             float vn = math.dot(v, surfaceNormal);
             vn = math.abs(math.clamp(vn, float.MinValue, 0));

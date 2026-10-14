@@ -2,8 +2,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//TODO
+// 1. add support for uneven voxel sizes
+
 public class SDFBakeWindow : EditorWindow {
     private Bounds bounds;
+    private int voxelMargin = 1;
     private float voxelSize = 0.1f;
 
     string sceneName => SceneManager.GetActiveScene().name;
@@ -34,8 +38,8 @@ public class SDFBakeWindow : EditorWindow {
         EditorGUI.BeginChangeCheck();
 
         bounds = EditorGUILayout.BoundsField("Bounds", bounds);
+        voxelMargin = EditorGUILayout.IntField("Margin", voxelMargin);
         voxelSize = EditorGUILayout.FloatField("Voxel Size", voxelSize);
-
         if (EditorGUI.EndChangeCheck()) {
             SceneView.RepaintAll();
         }
@@ -58,25 +62,21 @@ public class SDFBakeWindow : EditorWindow {
     }
 
     private void Bake() {
-        Vector3Int res = new Vector3Int(
-            Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / voxelSize)),
-            Mathf.Max(1, Mathf.RoundToInt(bounds.size.y / voxelSize)),
-            Mathf.Max(1, Mathf.RoundToInt(bounds.size.z / voxelSize))
-        );
+        SDFBaker baker = new SDFBaker(bounds, voxelSize);
+        var progress = new EditorBakeProgress("Baking SDF");
+        SDFVolumeData volume = baker.Make(progress);
 
-        Texture3D resultTex = new Texture3D(res.x, res.y, res.z, TextureFormat.RFloat, false);
-        var items = FindObjectsByType<SDFItem>(FindObjectsSortMode.None);
-        resultTex = BakeSDFTexture(items, resultTex);
-
-        SDFVolumeData volume = new SDFVolumeData(bounds, voxelSize, resultTex);
-
+        if (progress.canceled) {
+            Debug.Log("Bake canceled");
+            return;
+        }
 
         if (!System.IO.Directory.Exists(folder)) {
             System.IO.Directory.CreateDirectory(folder);
             AssetDatabase.Refresh();
         }
 
-        AssetDatabase.CreateAsset(resultTex, textureAssetPath);
+        AssetDatabase.CreateAsset(volume.SDFTexture, textureAssetPath);
         SaveAsset(volume);
 
         Debug.Log($"Baked to: {volumeAssetPath}");
@@ -100,33 +100,10 @@ public class SDFBakeWindow : EditorWindow {
         foreach (var a in FindObjectsByType<SDFItem>(FindObjectsSortMode.None)) {
             volume.Encapsulate(a.GetBounds());
         }
+        volume.Expand(voxelMargin * voxelSize);
 
         return volume;
     }
 
-    public Texture3D BakeSDFTexture(SDFItem[] items, Texture3D tex) {
-        for (int x = 0; x < tex.width; x++) {
-            for (int y = 0; y < tex.height; y++) {
-                for (int z = 0; z < tex.depth; z++) {
-                    Vector3 pos = new Vector3(
-                        (float)x / (tex.width - 1) * bounds.size.x + bounds.center.x - bounds.size.x * 0.5f,
-                        (float)y / (tex.height - 1) * bounds.size.y + bounds.center.y - bounds.size.y * 0.5f,
-                        (float)z / (tex.depth - 1) * bounds.size.z + bounds.center.z - bounds.size.z * 0.5f
-                    );
-                    float minDistance = float.MaxValue;
-
-                    foreach (var item in items) {
-                        float distance = item.GetDistance(pos);
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                        }
-                    }
-
-                    Color color = new Color(minDistance, 0, 0, 1);
-                    tex.SetPixel(x, y, z, color);
-                }
-            }
-        }
-        return tex;
-    }
 }
+
