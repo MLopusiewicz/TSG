@@ -1,6 +1,6 @@
 ﻿<Solution>
+  <Project Path="SDFBaker.csproj" />
+  <Project Path="SDFBaker.Editor.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
-  <Project Path="WorldBaker.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
-  <Project Path="WorldBaker.Editor.csproj" />
 </Solution>
