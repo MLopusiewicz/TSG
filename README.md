@@ -3,8 +3,8 @@
 **CPU**:  13th Gen Intel(R) Core(TM) i9-13900KF (3.00 GHz)
 **GPU**:  NVIDIA GeForce RTX 4080 (16 GB)
 
-![[Images/scene.png]]
-![[Images/profiler.png]]
+![Scene](Images/scene.png)
+![Profiler](Images/profiler.png)
 
 # How to run:
 
