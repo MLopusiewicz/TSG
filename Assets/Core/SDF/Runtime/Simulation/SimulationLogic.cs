@@ -27,6 +27,7 @@ public class SimulationLogic : MonoBehaviour {
     SimulationVolume space;
     NativeArray<float3> positions;
     NativeArray<float3> velocities;
+    JobHandle simulationHandle;
 
     void Setup() {
 
@@ -65,32 +66,38 @@ public class SimulationLogic : MonoBehaviour {
         Clear();
         StopAllCoroutines();
         Setup();
-        StartCoroutine(Calculate());
+        StartCoroutine(SimulationStep());
+        StartCoroutine(Render());
     }
 
 
-    IEnumerator Calculate() {
+    IEnumerator SimulationStep() {
         while (true) {
-            var job = new BallSimulationJob {
+            var job = new SimulationJob {
                 simulationSpace = space,
                 positions = positions,
                 velocities = velocities,
-                deltaTime = Time.deltaTime,
+                deltaTime = Time.fixedDeltaTime,
                 physicSetup = physicSetup
             };
 
-            job.Schedule(ballCount, 64).Complete();
-            Render();
+            simulationHandle = job.Schedule(ballCount, 64);
+            simulationHandle.Complete();
+            yield return new WaitForFixedUpdate();
+
+        }
+    }
+
+    IEnumerator Render() {
+        while (true) {
+            positionsBuffer.SetData(positions);
+            Graphics.RenderMeshPrimitives(renderParams, mesh, 0, ballCount);
             yield return null;
         }
     }
 
-    void Render() {
-        positionsBuffer.SetData(positions);
-        Graphics.RenderMeshPrimitives(renderParams, mesh, 0, ballCount);
-    }
-
     void Clear() {
+        simulationHandle.Complete();
         space.Dispose();
 
         if (positionsBuffer != null)
@@ -100,6 +107,7 @@ public class SimulationLogic : MonoBehaviour {
         if (velocities.IsCreated)
             velocities.Dispose();
     }
+
 
     void OnDestroy() {
         Clear();

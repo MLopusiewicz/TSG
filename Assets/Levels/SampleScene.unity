@@ -145,7 +145,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 73109205}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 250743913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}
@@ -580,7 +580,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 763379024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}
@@ -706,8 +706,8 @@ MonoBehaviour:
     radius: 0.1
     bounciness: 0.3
     drag: 0.001
-    friction: 0.2
-  ballCount: 1
+    friction: 0.01
+  ballCount: 10000
   spawnBounds:
     m_Center: {x: 0, y: 8, z: 0}
     m_Extent: {x: 4, y: 3, z: 4}
@@ -754,7 +754,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1213297964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1360064082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}
@@ -1133,7 +1133,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1960512919}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 455ab35017bdf504aaa8608318935b8b, type: 3}
+  m_Script: {fileID: 11500000, guid: b02ad5e7308b5cf40bd6a12942b58601, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tester
   volume: {fileID: 11400000, guid: eb72fa558b9b68a49a52f44596d0c4d4, type: 2}

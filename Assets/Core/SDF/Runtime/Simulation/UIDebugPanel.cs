@@ -10,7 +10,7 @@ public class IMGUIPanel : MonoBehaviour {
     public Vector2 margin = new Vector2(10f, 10f);
     public Color backgroundColor = new Color(0.08f, 0.09f, 0.11f, 0.85f);
     public Color accentColor = new Color(0.30f, 0.65f, 1f, 1f);
-    public float referenceHeight = 1080f; 
+    public float referenceHeight = 1080f;
 
     float smoothedDelta = 1f / 60f;
 
@@ -136,14 +136,16 @@ public class IMGUIPanel : MonoBehaviour {
             }
 
             using (new GUILayout.HorizontalScope()) {
-                if (GUILayout.Button("Reset +1K", buttonStyle)) {
-                    target.ballCount += 1000;
-                    target.Simulate();
-                }
                 if (GUILayout.Button("Reset +5K", buttonStyle)) {
                     target.ballCount += 5000;
                     target.Simulate();
                 }
+
+                if (GUILayout.Button("Reset +10K", buttonStyle)) {
+                    target.ballCount += 10000;
+                    target.Simulate();
+                }
+
             }
         }
 

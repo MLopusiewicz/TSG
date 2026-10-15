@@ -5,7 +5,7 @@ using Unity.Mathematics;
 
 
 [BurstCompile]
-struct BallSimulationJob : IJobParallelFor {
+struct SimulationJob : IJobParallelFor {
 
     public NativeArray<float3> positions;
     public NativeArray<float3> velocities;
@@ -27,13 +27,14 @@ struct BallSimulationJob : IJobParallelFor {
             position -= surfaceNormal * surfaceToSurfaceDistance;
 
             float vn = math.dot(v, surfaceNormal);
-            vn = math.abs(math.clamp(vn, float.MinValue, 0));
+            vn = math.clamp(vn, float.MinValue, 0);
 
             float3 vNormal = vn * surfaceNormal;
-            float3 tangent = v - vNormal;
+            float3 vTangent = v - vNormal;
 
-            v += -tangent * physicSetup.friction;
-            v += vNormal * (1 + physicSetup.bounciness);
+
+            v = -vNormal * (physicSetup.bounciness);
+            v += vTangent * (1 - physicSetup.friction);
         }
 
         v *= (1f - physicSetup.drag);
