@@ -1,9 +1,7 @@
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class Tester : MonoBehaviour {
+public class SDFDebugComponent : MonoBehaviour {
     public SDFVolumeData volume;
     public Vector3Int snappedIndex;
     public float sampledDistance;
@@ -12,12 +10,12 @@ public class Tester : MonoBehaviour {
     public float textureVoxelValue;
     public float bakeValue;
 
-    SimulationSpace space;
+    SimulationVolume space;
     SDFItem[] items;
 
     private void Awake() {
         items = FindObjectsByType<SDFItem>(FindObjectsSortMode.None);
-        space = SimulationSpace.Make(volume);
+        space = SimulationVolume.Make(volume);
     }
 
     //normally i'd put in function with [Button] attribute from Odin inspector so it's not calculated every frame. But displaying it in public floats works 
@@ -48,11 +46,14 @@ public class Tester : MonoBehaviour {
             return;
         if (volume == null)
             return;
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, Vector3.one * volume.VoxelSize);
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(GetVoxelPos(snappedIndex), Vector3.one * volume.VoxelSize);
+        var gradient = space.Gradient(new float3(transform.position.x, transform.position.y, transform.position.z));
+        Gizmos.DrawLine(transform.position, transform.position + new Vector3(gradient.x, gradient.y, gradient.z));
     }
 
 

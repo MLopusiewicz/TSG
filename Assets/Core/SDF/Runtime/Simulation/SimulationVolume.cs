@@ -1,19 +1,19 @@
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Mathematics;
 
-public struct SimulationSpace : IDisposable {
+public struct SimulationVolume : IDisposable {
     [ReadOnly] public NativeArray<float> data;
-    public int3 dimensions;
-    public float3 boundsMin, boundsMax, boundsSize;
+    int3 dimensions;
+    float3 boundsMin, boundsMax;
     float voxelSize;
 
-    public static SimulationSpace Make(SDFVolumeData data) {
-        var space = new SimulationSpace() {
+    public static SimulationVolume Make(SDFVolumeData data) {
+        var space = new SimulationVolume() {
             dimensions = new int3(data.SDFTexture.width, data.SDFTexture.height, data.SDFTexture.depth),
             boundsMin = data.Bounds.min,
             boundsMax = data.Bounds.max,
-            boundsSize = data.Bounds.size,
             voxelSize = data.VoxelSize
         };
         space.data = new NativeArray<float>(space.dimensions.x * space.dimensions.y * space.dimensions.z, Allocator.Persistent);
@@ -73,6 +73,7 @@ public struct SimulationSpace : IDisposable {
         return math.normalizesafe(g, new float3(0, 1, 0));
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public float VoxelSample(int3 indexVector) {
         indexVector = math.clamp(indexVector, int3.zero, dimensions - 1);
         return data[indexVector.x + indexVector.y * dimensions.x + indexVector.z * dimensions.x * dimensions.y];

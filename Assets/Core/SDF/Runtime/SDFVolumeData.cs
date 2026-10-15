@@ -1,5 +1,3 @@
-using Codice.CM.Common.Replication;
-using log4net.Util;
 using UnityEngine;
 
 public class SDFVolumeData : ScriptableObject {
@@ -16,5 +14,13 @@ public class SDFVolumeData : ScriptableObject {
         this.voxelSize = voxelSize;
         this.sdfTexture = sdfTexture;
         this.bounds = bounds;
+    }
+
+    private void OnValidate() {
+        if (sdfTexture != null) {
+            if(sdfTexture.format != TextureFormat.RFloat) {
+                Debug.LogWarning("SDF Texture format MUST be RFloat.");
+            }
+        }
     }
 }

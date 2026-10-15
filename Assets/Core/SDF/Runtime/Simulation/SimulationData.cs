@@ -6,6 +6,7 @@ using UnityEngine;
 public struct SimulationData {
 
     public float3 gravity;
+    public float radius;
 
     [Range(0f, 1f)]
     public float bounciness;
@@ -13,7 +14,9 @@ public struct SimulationData {
     [Range(0f, 1f)]
     public float drag;
 
+
+
     [Range(0f, 1f)]
-    public float radius;
+    public float friction;
 
 }

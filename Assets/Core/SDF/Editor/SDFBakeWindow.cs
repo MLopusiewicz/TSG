@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SDFBakeWindow : EditorWindow {
     private Bounds bounds;
-    private int voxelMargin = 1;
+    private int voxelMargin = 2;
     private float voxelSize = 0.1f;
 
     string sceneName => SceneManager.GetActiveScene().name;
