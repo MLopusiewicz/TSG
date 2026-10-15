@@ -1,7 +1,7 @@
 using UnityEngine;
 
-//Low priority: AI generated 
-public class IMGUIPanel : MonoBehaviour {
+//Low priority: AI generated for styling and layout
+public class SimulationControlPanel : MonoBehaviour {
     public SDFVolumeData volume;
     public SimulationLogic target;
 
@@ -18,7 +18,6 @@ public class IMGUIPanel : MonoBehaviour {
     Texture2D bgTex, lineTex, btnNormalTex, btnHoverTex, btnActiveTex;
 
     void Update() {
-
         smoothedDelta = Mathf.Lerp(smoothedDelta, Time.unscaledDeltaTime, 0.05f);
     }
 
