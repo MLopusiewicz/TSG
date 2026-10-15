@@ -1,3 +1,11 @@
+# Outcome:
+
+**CPU**:  13th Gen Intel(R) Core(TM) i9-13900KF (3.00 GHz)
+**GPU**:  NVIDIA GeForce RTX 4080 (16 GB)
+
+![[Images/scene.png]]
+![[Images/profiler.png]]
+
 # How to run:
 
 ## Bake
@@ -53,8 +61,8 @@ Simulation lifetime is controlled in coroutines: Job is scheduled in FixedUpdate
 * 2 pass shader - render and shadow pass, 
 
 ## Stress test
-**CPU**:  i9-13900KF
-**GPU**:  RTX 4080 (16 GB)
+**CPU**:  13th Gen Intel(R) Core(TM) i9-13900KF (3.00 GHz)
+**GPU**:  NVIDIA GeForce RTX 4080 (16 GB)
 
 FPS fell below 60 with 300k balls in basic setup.
 
